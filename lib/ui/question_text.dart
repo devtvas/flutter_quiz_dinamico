@@ -52,7 +52,7 @@ class QuestionTextState extends State<QuestionText>
         padding: new EdgeInsets.symmetric(vertical: 20.0),
         child: new Center(
           child: new Text(
-            "Statement " +
+            "Pergunta " +
                 widget._questionNumber.toString() +
                 ": " +
                 widget._question,

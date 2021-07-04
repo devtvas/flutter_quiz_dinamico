@@ -1,135 +1,98 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:quiz_test/user.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-// typedef OnDelete();
+import 'form_model.dart';
 
-// class UserForm extends StatefulWidget {
-//   final User user;
-//   final state = _UserFormState();
-//   final OnDelete onDelete;
+typedef OnDelete();
 
-//   UserForm({Key key, this.user, this.onDelete}) : super(key: key);
-//   @override
-//   _UserFormState createState() => state;
+class FormWidget extends StatefulWidget {
+  final FormModel forms;
+  final state = _FormWidgetState();
+  final OnDelete onDelete;
 
-//   bool isValid() => state.validate();
-// }
+  FormWidget({Key key, this.forms, this.onDelete}) : super(key: key);
+  @override
+  _FormWidgetState createState() => state;
 
-// class _UserFormState extends State<UserForm> {
-//   final form = GlobalKey<FormState>();
+  bool isValid() => state.validate();
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: EdgeInsets.all(16),
-//       child: Scaffold(
-//         body: Material(
-//           elevation: 1,
-//           clipBehavior: Clip.antiAlias,
-//           borderRadius: BorderRadius.circular(8),
-//           child: Form(
-//             key: form,
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: <Widget>[
-//                 AppBar(
-//                   // leading: Icon(Icons.question_answer_rounded),
-//                   elevation: 0,
-//                   title: TextFormField(
-//                     initialValue: widget.user.fullName,
-//                     // onSaved: (val) => widget.user.fullName = val,
-//                     // validator: (val) =>
-//                     //     val.length < 3 ? null : 'insira um valor maior',
-//                     style: TextStyle(
-//                       color: Colors.white,
-//                     ),
-//                     autovalidateMode: AutovalidateMode.onUserInteraction,
-//                     decoration: InputDecoration(
-//                       labelText: 'Tipo Questao',
-//                       labelStyle: TextStyle(
-//                         color: Colors.white,
-//                       ),
-//                       hintText: 'insira a Questao',
-//                       hintStyle: TextStyle(
-//                         color: Colors.white,
-//                       ),
-//                       floatingLabelBehavior: FloatingLabelBehavior.auto,
-//                       isDense: true,
-//                     ),
-//                   ),
-//                   backgroundColor: Color(0xFF2e2a4f),
-//                   centerTitle: true,
-//                   actions: <Widget>[
-//                     IconButton(
-//                       icon: Icon(
-//                         CupertinoIcons.trash,
-//                       ),
-//                       onPressed: widget.onDelete,
-//                     )
-//                   ],
-//                 ),
-//                 Padding(
-//                   padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-//                   child: TextFormField(
-//                     initialValue: widget.user.fullName,
-//                     onSaved: (val) => widget.user.fullName = val,
-//                     validator: (val) =>
-//                         val.length < 3 ? null : 'insira um valor maior',
-//                     decoration: InputDecoration(
-//                       labelText: 'resposta',
-//                       hintText: 'insira a resposta',
-//                       icon: Icon(Icons.circle),
-//                       isDense: true,
-//                     ),
-//                   ),
-//                 ),
-//                 Padding(
-//                   padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-//                   child: ListView.builder(
-//                     addAutomaticKeepAlives: true,
-//                     itemCount: users.length,
-//                     itemBuilder: (_, i) => users[i],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//         floatingActionButton: FloatingActionButton(
-//           child: Icon(
-//             CupertinoIcons.add,
-//             size: 26,
-//           ),
-//           onPressed: onAddForm,
-//           foregroundColor: Colors.white,
-//           backgroundColor: Color(0xFFC42224),
-//         ),
-//       ),
-//     );
-//   }
+class _FormWidgetState extends State<FormWidget> {
+  final _formKey = GlobalKey<FormState>();
+  final _controller = TextEditingController();
+  final credentials = FormModel();
+  List<FormWidget> form = [];
 
-//   ///form validator
-//   bool validate() {
-//     var valid = form.currentState.validate();
-//     if (valid) form.currentState.save();
-//     return valid;
-//   }
+  @override
+  void initState() {
+    // whenever the value of the field changes, _updateValue is called
+    _controller.addListener(_updateValue);
+    super.initState();
+  }
 
-//   ///on add form
-//   void onAddForm() {
-//     setState(() {
-//       TextFormField(
-//         initialValue: widget.user.fullName,
-//         onSaved: (val) => widget.user.fullName = val,
-//         validator: (val) => val.length < 3 ? null : 'insira um valor maior',
-//         decoration: InputDecoration(
-//           labelText: 'resposta',
-//           hintText: 'insira a resposta',
-//           icon: Icon(Icons.circle),
-//           isDense: true,
-//         ),
-//       );
-//     });
-//   }
-// }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  _updateValue() {
+    setState(() {}); // this causes the widget to be built again
+  }
+
+  Widget _renderCard(String element) {
+    return Card(
+      child: ListTile(
+        leading: Icon(Icons.radio_button_unchecked),
+        title: Text(element),
+        onTap: () {
+          // changes the value inside the field
+          _controller.text = element;
+        },
+      ),
+    );
+  }
+
+  Widget _renderTextField() {
+    return TextField(
+      controller: _controller,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.search),
+        suffixIcon: _controller.text.length > 0
+            ? GestureDetector(
+                onTap: _controller.clear, // removes the content in the field
+                child: Icon(Icons.clear_rounded),
+              )
+            : null,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        children: [
+          _renderTextField(),
+          SizedBox(height: 20),
+          // Expanded(
+          //   child: ListView(
+          //     children: form
+          //         .where((element) => element.contains(_controller.text))
+          //         .map(_renderCard)
+          //         .toList(),
+          //   ),
+          // )
+        ],
+      ),
+    );
+  }
+
+  ///form validator
+  bool validate() {
+    var valid = _formKey.currentState.validate();
+    if (valid) _formKey.currentState.save();
+    return valid;
+  }
+}

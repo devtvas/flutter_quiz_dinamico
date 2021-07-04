@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_test/pages/home.dart';
-import 'package:quiz_test/user.dart';
+import 'package:quiz_test/card_model.dart';
 
 import 'empty_card_state.dart';
 
-import 'form.dart';
+import 'card.dart';
 
 class MultiForm extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class MultiForm extends StatefulWidget {
 }
 
 class _MultiFormState extends State<MultiForm> {
-  List<UserCard> users = [];
+  List<CardWidget> cards = [];
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +54,18 @@ class _MultiFormState extends State<MultiForm> {
               begin: Alignment.bottomLeft,
             ),
           ),
-          child: users.length <= 0
+          child: cards.length <= 0
               ? Center(
                   child: EmptyCardState(
-                    title: 'Oops',
-                    message: 'Adicione o formulário tocando no botão abaixo',
+                    title: 'Quiz',
+                    message: 'Adicione tocando no botão abaixo',
                     onPressed: onAddForm,
                   ),
                 )
               : ListView.builder(
                   addAutomaticKeepAlives: true,
-                  itemCount: users.length,
-                  itemBuilder: (_, i) => users[i],
+                  itemCount: cards.length,
+                  itemBuilder: (_, i) => cards[i],
                 ),
         ),
         floatingActionButton: Column(
@@ -98,53 +98,67 @@ class _MultiFormState extends State<MultiForm> {
         ));
   }
 
-  ///on form user deleted
-  void onDelete(User _user) {
-    setState(() {
-      var find = users.firstWhere(
-        (it) => it.user == _user,
-        orElse: () => null,
-      );
-      if (find != null) users.removeAt(users.indexOf(find));
-    });
-  }
-
   ///on add form
   void onAddForm() {
     setState(() {
-      var _user = User();
-      users.add(UserCard(
-        user: _user,
+      var _user = CardModel();
+      cards.add(CardWidget(
+        cards: _user,
         onDelete: () => onDelete(_user),
       ));
     });
   }
 
+  ///on form user deleted
+  void onDelete(CardModel _user) {
+    setState(() {
+      var find = cards.firstWhere(
+        (it) => it.cards == _user,
+        orElse: () => null,
+      );
+      if (find != null) cards.removeAt(cards.indexOf(find));
+    });
+  }
+
   ///on save forms
   void onSave() {
-    if (users.length > 0) {
+    if (cards.length > 0) {
       var allValid = true;
-      users.forEach((form) => allValid = allValid && form.isValid());
+      cards.forEach((form) => allValid = allValid && form.isValid());
       if (allValid) {
-        var data = users.map((it) => it.user).toList();
+        var data = cards.map((it) => it.cards).toList();
         Navigator.push(
           context,
           MaterialPageRoute(
             fullscreenDialog: true,
             builder: (_) => Scaffold(
+              backgroundColor: Color(0xFFC42224),
               appBar: AppBar(
+                backgroundColor: Color(0xFFC42224),
                 title: Text('Lista de Questoes'),
               ),
-              body: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (_, i) => ListTile(
-                  leading: CircleAvatar(
-                    child: Text(data[i].fullName.substring(0, 1)),
+              body: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF2e2a4f),
+                      Color(0xFFC42224),
+                    ],
+                    end: Alignment.topRight,
+                    begin: Alignment.bottomLeft,
                   ),
-                  title: Text(data[i].fullName),
-                  subtitle: Text(data[i].email),
-                  onTap: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomePage())),
+                ),
+                child: ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (_, i) => ListTile(
+                    leading: CircleAvatar(
+                      child: Text(data[i].fullName.substring(0, 1)),
+                    ),
+                    title: Text(data[i].fullName),
+                    subtitle: Text(data[i].email),
+                    onTap: () => Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => HomePage())),
+                  ),
                 ),
               ),
             ),
@@ -156,18 +170,18 @@ class _MultiFormState extends State<MultiForm> {
 
   ///on save forms
   void onCloud() {
-    if (users.length > 0) {
+    if (cards.length > 0) {
       var allValid = true;
-      users.forEach((form) => allValid = allValid && form.isValid());
+      cards.forEach((form) => allValid = allValid && form.isValid());
       if (allValid) {
-        var data = users.map((it) => it.user).toList();
+        var data = cards.map((it) => it.cards).toList();
         Navigator.push(
           context,
           MaterialPageRoute(
             fullscreenDialog: true,
             builder: (_) => Scaffold(
               appBar: AppBar(
-                title: Text('List of Users'),
+                title: Text('List of cards'),
               ),
               body: ListView.builder(
                 itemCount: data.length,

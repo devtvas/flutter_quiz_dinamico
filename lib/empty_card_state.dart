@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EmptyCardState extends StatelessWidget {
@@ -22,7 +23,12 @@ class EmptyCardState extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Text(message),
             ),
-            IconButton(icon: Icon(Icons.add), onPressed: onPressed)
+            IconButton(
+                icon: Icon(
+                  CupertinoIcons.add,
+                  size: 50,
+                ),
+                onPressed: onPressed)
           ],
         ),
       ),

@@ -5,7 +5,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Material(
-      color: Colors.greenAccent,
+      color: Color(0xFF2e2a4f),
       child: new InkWell(
         onTap: () => Navigator.of(context).push(new MaterialPageRoute(
             builder: (BuildContext context) => new QuizPage())),
@@ -13,14 +13,14 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             new Text(
-              "Lets Quizzz",
+              "GP Mobile Quizzz",
               style: new TextStyle(
                   color: Colors.white,
                   fontSize: 35.0,
                   fontWeight: FontWeight.bold),
             ),
             new Text(
-              "Tap to start!",
+              "iniciar!",
               style: new TextStyle(
                   color: Colors.white,
                   fontSize: 20.0,
