@@ -6,11 +6,11 @@ import 'form_model.dart';
 typedef OnDelete();
 
 class FormWidget extends StatefulWidget {
-  final FormModel forms;
+  final FormModel? forms;
   final state = _FormWidgetState();
-  final OnDelete onDelete;
+  final OnDelete? onDelete;
 
-  FormWidget({Key key, this.forms, this.onDelete}) : super(key: key);
+  FormWidget({Key? key, this.forms, this.onDelete}) : super(key: key);
   @override
   _FormWidgetState createState() => state;
 
@@ -91,8 +91,8 @@ class _FormWidgetState extends State<FormWidget> {
 
   ///form validator
   bool validate() {
-    var valid = _formKey.currentState.validate();
-    if (valid) _formKey.currentState.save();
+    var valid = _formKey.currentState!.validate();
+    if (valid) _formKey.currentState!.save();
     return valid;
   }
 }

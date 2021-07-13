@@ -8,11 +8,11 @@ import 'form_model.dart';
 typedef OnDelete();
 
 class CardWidget extends StatefulWidget {
-  final CardModel cards;
+  final CardModel? cards;
   final state = _CardWidgetState();
-  final OnDelete onDelete;
+  final OnDelete? onDelete;
 
-  CardWidget({Key key, this.cards, this.onDelete}) : super(key: key);
+  CardWidget({Key? key, this.cards, this.onDelete}) : super(key: key);
   @override
   _CardWidgetState createState() => state;
 
@@ -22,8 +22,63 @@ class CardWidget extends StatefulWidget {
 class _CardWidgetState extends State<CardWidget> {
   final _controller = TextEditingController();
   final _controller2 = TextEditingController();
+  late TextEditingController _controllerQuestoes, _controllerRespostas;
   final card = GlobalKey<FormState>();
   List<FormWidget> forms = [];
+  List<String> campo = [];
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    _controllerQuestoes = TextEditingController();
+    _controllerRespostas = TextEditingController();
+  }
+
+  Widget _respTile(String name) {
+    return Padding(
+      padding: const EdgeInsets.all(3),
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border(
+          bottom: BorderSide(color: Colors.grey.shade300),
+          top: BorderSide(color: Colors.grey.shade300),
+          left: BorderSide(color: Colors.grey.shade300),
+          right: BorderSide(color: Colors.grey.shade300),
+        )),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.crop_din),
+                onPressed: () {},
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(38),
+                  child: Text(
+                    name,
+                    textScaleFactor: 1,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => setState(() => campo.remove(name)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +97,7 @@ class _CardWidgetState extends State<CardWidget> {
                 // leading: Icon(Icons.question_answer_rounded),
                 elevation: 0,
                 title: TextFormField(
-                  initialValue: widget.cards.fullName,
+                  initialValue: widget.cards!.fullName,
                   // onSaved: (val) => widget.user.fullName = val,
                   // validator: (val) =>
                   //     val.length < 3 ? null : 'insira um valor maior',
@@ -90,48 +145,44 @@ class _CardWidgetState extends State<CardWidget> {
                         )
                       : Column(
                           children: [
-                            Card(
-                              child: ListTile(
-                                leading: Icon(Icons.radio_button_unchecked),
-                                title: TextField(
-                                  controller: _controller,
-                                  decoration: InputDecoration(
-                                    // prefixIcon: Icon(Icons.search),
-                                    suffixIcon: _controller.text.length > 0
-                                        ? GestureDetector(
-                                            onTap: _controller
-                                                .clear, // removes the content in the field
-                                            child: Icon(Icons.clear_rounded),
-                                          )
-                                        : null,
+                            if (campo == null || campo.isEmpty)
+                              const SizedBox(height: 0)
+                            else
+                              SizedBox(
+                                height: 290,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3),
+                                  child: ListView(
+                                    scrollDirection: Axis.vertical,
+                                    children: List<Widget>.generate(
+                                        campo.length, (int index) {
+                                      return _respTile(campo[index]);
+                                    }),
                                   ),
                                 ),
-                                onTap: () {
-                                  // changes the value inside the field
-                                  _controller.text = 'insira a resposta';
-                                },
                               ),
-                            ),
+                            const Divider(),
                             Card(
                               child: ListTile(
-                                leading: Icon(Icons.radio_button_unchecked),
+                                tileColor: Colors.red[50],
+                                leading: const Icon(Icons.queue_sharp),
                                 title: TextField(
-                                  controller: _controller2,
-                                  decoration: InputDecoration(
-                                    // prefixIcon: Icon(Icons.search),
-                                    suffixIcon: _controller2.text.length > 0
-                                        ? GestureDetector(
-                                            onTap: _controller2
-                                                .clear, // removes the content in the field
-                                            child: Icon(Icons.clear_rounded),
-                                          )
-                                        : null,
-                                  ),
+                                  controller: _controllerRespostas,
+                                  decoration: const InputDecoration(
+                                      labelText: 'Add Answer´s'),
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (String value) => setState(() {}),
                                 ),
-                                onTap: () {
-                                  // changes the value inside the field
-                                  _controller2.text = 'insira a resposta';
-                                },
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: _controllerRespostas.text.isEmpty
+                                      ? null
+                                      : () => setState(() {
+                                            campo.add(_controllerRespostas.text
+                                                .toString());
+                                            _controllerRespostas.clear();
+                                          }),
+                                ),
                               ),
                             ),
                           ],
@@ -145,8 +196,8 @@ class _CardWidgetState extends State<CardWidget> {
 
   ///form validator
   bool validate() {
-    var valid = card.currentState.validate();
-    if (valid) card.currentState.save();
+    var valid = card.currentState!.validate();
+    if (valid) card.currentState!.save();
     return valid;
   }
 
@@ -166,7 +217,7 @@ class _CardWidgetState extends State<CardWidget> {
     setState(() {
       var find = forms.firstWhere(
         (it) => it.forms == _user,
-        orElse: () => null,
+        orElse: () => null!,
       );
       if (find != null) forms.removeAt(forms.indexOf(find));
     });

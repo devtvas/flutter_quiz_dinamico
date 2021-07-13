@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EmptyCardState extends StatelessWidget {
-  final String title, message;
-  VoidCallback onPressed;
+  final String? title, message;
+  VoidCallback? onPressed;
   EmptyCardState({this.title, this.message, this.onPressed});
 
   @override
@@ -18,10 +18,10 @@ class EmptyCardState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(title, style: Theme.of(context).textTheme.headline),
+            Text(title!, style: Theme.of(context).textTheme.headline),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text(message),
+              child: Text(message!),
             ),
             IconButton(
                 icon: Icon(

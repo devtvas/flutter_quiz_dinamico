@@ -13,16 +13,16 @@ class QuizPage extends StatefulWidget {
 }
 
 class QuizPageState extends State<QuizPage> {
-  Question currentQuestion;
+  Question? currentQuestion;
   Quiz quiz = new Quiz([
     new Question("Superman is human?", false),
     new Question("Piza is healthy?", false),
     new Question("Flutter is awesome?", true)
   ]);
 
-  String questionText;
-  int questionNumber;
-  bool isCorrect;
+  String? questionText;
+  int? questionNumber;
+  bool? isCorrect;
   bool overlayShouldBeVisible = false;
 
   @override
@@ -30,13 +30,13 @@ class QuizPageState extends State<QuizPage> {
     super.initState();
 
     currentQuestion = quiz.nextQuestion;
-    questionText = currentQuestion.question;
+    questionText = currentQuestion!.question;
     questionNumber = quiz.questionNumber;
   }
 
   void handleAnswer(bool answer) {
-    isCorrect = (currentQuestion.answer == answer);
-    quiz.answer(isCorrect);
+    isCorrect = (currentQuestion!.answer == answer);
+    quiz.answer(isCorrect!);
     this.setState(() {
       overlayShouldBeVisible = true;
     });
@@ -50,13 +50,13 @@ class QuizPageState extends State<QuizPage> {
         new Column(
           children: <Widget>[
             new AnswerButton(true, () => handleAnswer(true)),
-            new QuestionText(questionText, questionNumber),
+            new QuestionText(questionText!, questionNumber!),
             new AnswerButton(false, () => handleAnswer(false))
           ],
         ),
         overlayShouldBeVisible
-            ? new CorrectWrongOverlay(isCorrect, () {
-                if (questionNumber >= quiz.length) {
+            ? new CorrectWrongOverlay(isCorrect!, () {
+                if (questionNumber! >= quiz.length) {
                   Navigator.of(context).pushAndRemoveUntil(
                       new MaterialPageRoute(
                           builder: (BuildContext context) =>
@@ -67,7 +67,7 @@ class QuizPageState extends State<QuizPage> {
                 currentQuestion = quiz.nextQuestion;
                 this.setState(() {
                   overlayShouldBeVisible = false;
-                  questionText = currentQuestion.question;
+                  questionText = currentQuestion!.question;
                   questionNumber = quiz.questionNumber;
                 });
               })

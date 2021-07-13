@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EmptyState extends StatelessWidget {
-  final String title, message;
+  final String? title, message;
   EmptyState({this.title, this.message});
 
   @override
@@ -16,10 +16,10 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(title, style: Theme.of(context).textTheme.headline),
+            Text(title!, style: Theme.of(context).textTheme.headline),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text(message),
+              child: Text(message!),
             ),
           ],
         ),

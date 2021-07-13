@@ -13,8 +13,8 @@ class CorrectWrongOverlay extends StatefulWidget {
 
 class CorrectWrongOverlaySate extends State<CorrectWrongOverlay>
     with SingleTickerProviderStateMixin {
-  Animation<double> _iconAnimation;
-  AnimationController _iconAnimationController;
+  Animation<double>? _iconAnimation;
+  AnimationController? _iconAnimationController;
 
   @override
   void initState() {
@@ -23,18 +23,18 @@ class CorrectWrongOverlaySate extends State<CorrectWrongOverlay>
         duration: new Duration(seconds: 2), vsync: this);
 
     _iconAnimation = new CurvedAnimation(
-        parent: _iconAnimationController, curve: Curves.elasticOut);
+        parent: _iconAnimationController!, curve: Curves.elasticOut);
 
-    _iconAnimation.addListener(() => this.setState(() {}));
-    _iconAnimationController.forward();
+    _iconAnimation!.addListener(() => this.setState(() {}));
+    _iconAnimationController!.forward();
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    _iconAnimationController.dispose();
-    _iconAnimationController.forward();
+    _iconAnimationController!.dispose();
+    _iconAnimationController!.forward();
   }
 
   @override
@@ -51,10 +51,10 @@ class CorrectWrongOverlaySate extends State<CorrectWrongOverlay>
               decoration: new BoxDecoration(
                   color: Colors.white, shape: BoxShape.circle),
               child: new Transform.rotate(
-                angle: _iconAnimation.value * 2 * PI,
+                angle: _iconAnimation!.value * 2,
                 child: new Icon(
                   widget._isCurrect ? Icons.done : Icons.clear,
-                  size: _iconAnimation.value * 55.0,
+                  size: _iconAnimation!.value * 55.0,
                 ),
               ),
             ),

@@ -12,8 +12,8 @@ class QuestionText extends StatefulWidget {
 
 class QuestionTextState extends State<QuestionText>
     with SingleTickerProviderStateMixin {
-  Animation<double> _fontSizeAnimation;
-  AnimationController _fontSizeAnimationController;
+  Animation<double>? _fontSizeAnimation;
+  AnimationController? _fontSizeAnimationController;
 
   @override
   void initState() {
@@ -21,17 +21,17 @@ class QuestionTextState extends State<QuestionText>
     _fontSizeAnimationController = new AnimationController(
         duration: new Duration(milliseconds: 500), vsync: this);
     _fontSizeAnimation = new CurvedAnimation(
-        parent: _fontSizeAnimationController, curve: Curves.linear);
-    _fontSizeAnimation.addListener(() => this.setState(() {}));
-    _fontSizeAnimationController.forward();
+        parent: _fontSizeAnimationController!, curve: Curves.linear);
+    _fontSizeAnimation!.addListener(() => this.setState(() {}));
+    _fontSizeAnimationController!.forward();
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    _fontSizeAnimationController.dispose();
-    _fontSizeAnimationController.forward();
+    _fontSizeAnimationController!.dispose();
+    _fontSizeAnimationController!.forward();
   }
 
   @override
@@ -39,8 +39,8 @@ class QuestionTextState extends State<QuestionText>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget._question != widget._question) {
-      _fontSizeAnimationController.reset();
-      _fontSizeAnimationController.forward();
+      _fontSizeAnimationController!.reset();
+      _fontSizeAnimationController!.forward();
     }
   }
 
@@ -56,7 +56,7 @@ class QuestionTextState extends State<QuestionText>
                 widget._questionNumber.toString() +
                 ": " +
                 widget._question,
-            style: new TextStyle(fontSize: _fontSizeAnimation.value * 15),
+            style: new TextStyle(fontSize: _fontSizeAnimation!.value * 15),
           ),
         ),
       ),
